@@ -1,0 +1,165 @@
+@model Entities.ViewModel.OrderVM
+
+@{
+    ViewData["Title"] = "Order Page";
+    if (TempData["Message"] != null)
+    {
+        <div class="alert alert-@TempData["MessageType"]">@TempData["Message"]</div>
+    }
+}
+
+
+<!-- Overlay for small screens -->
+<div class="overlay" id="overlay"></div>
+
+<div class="content pe-0" id="content">
+    <!-- Main content goes here -->
+    @* data-id="@Model.SectionId" *@
+    <form method="get" id="searchForm">
+        <!-- Orders Header and Filters -->
+        <div class="row gx-3 gy-2 mb-3 align-items-center justify-content-between mx-0 rounded">
+            <div class="d-none Categoryid" id="Categoryidsearch"></div>
+
+            <!-- Title -->
+            <div class="col-12 col-md-3 col-lg-2">
+                <h1 class="webybtn mb-0">Orders</h1>
+            </div>
+
+            <!-- Filters and Controls -->
+            <div class="col-12 col-md-9 col-lg-10 d-flex flex-wrap align-items-center justify-content-end gap-3">
+
+                <!-- Search -->
+                @* <div class="position-relative" style="max-width: 250px; flex: 1 1 auto;">
+                        <input class="form-control form-control-lg" type="search" name="search" placeholder="Search"
+                            id="searchInput" style="height: 60px;">
+                        <i class="fa fa-search position-absolute"
+                            style="top: 50%; right: 15px; transform: translateY(-50%);"></i>
+                    </div> *@
+
+                <!-- Order Status -->
+                <div style="max-width: 300px; flex: 1 1 auto;">
+                    <select id="orderStatus" name="orderStatus" class="form-select" style="height: 60px;">
+                        <option value="">All Status</option>
+                        <option value="On Hold">On Hold</option>
+                        <option value="Failed">Failed</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Served">Served</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+
+
+
+                <!-- Export Button -->
+                <div>
+                    <a class="btn fs-5 text-white exportBtn align-items-center d-flex justify-content-center"
+                        style="background-color: rgba(0, 102, 167, 1);">
+                        <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>Export
+                    </a>
+                </div>
+
+                <div>
+                    <a class="btn fs-5 text-white exportBtn align-items-center d-flex justify-content-center"
+                        style="background-color: rgba(0, 102, 167, 1);" asp-area="" asp-controller="Event"
+                        asp-action="AddEvent">
+                        <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>Add Event
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Date Range and Buttons -->
+        <div class="row gx-3 gy-2 mb-3 align-items-center justify-content-end mx-0 rounded">
+            <div class="col-12 d-flex flex-wrap align-items-center justify-content-end gap-2">
+
+                <div class="col-2 pe-0">
+                    <div class="position-relative" style="max-width: 250px; flex: 1 1 auto;">
+                        <input class="form-control form-control-lg" type="search" name="search"
+                            placeholder="Customer Name" id="searchInput" style="height: 60px;">
+                        <i class="fa fa-search position-absolute"
+                            style="top: 50%; right: 15px; transform: translateY(-50%);"></i>
+                    </div>
+                </div>
+                <div class="col-2 pe-0">
+                    <select id="orderStatus" name="orderStatus" class="form-select" style="height: 60px;">
+                        <option value="">All Types</option>
+                        <option value="On Hold">On Hold</option>
+                        <option value="Failed">Failed</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Served">Served</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                <!-- Start Date -->
+                <div class="col-2 pe-0">
+                    <div class="form-floating">
+                        <input type="date" id="startDate" name="startDate" class="form-control">
+                        <label for="startDate">Start Date</label>
+                    </div>
+                </div>
+
+
+                <!-- End Date -->
+                <div class="col-2">
+                    <div class="form-floating">
+                        <input type="date" id="endDate" name="endDate" class="form-control">
+                        <label for="endDate">End Date</label>
+                    </div>
+                </div>
+
+
+                <!-- Search Button -->
+                <button type="button" class="btn text-white saveBtn"
+                    style="background-color: rgba(0, 102, 167, 1); height: 40px; width: 80px;">
+                    Search
+                </button>
+
+                <!-- Clear Button -->
+                <button type="button" class="btn cleareverything"
+                    style="background-color: white; border-color: rgba(0, 102, 167, 1); color: rgba(0, 102, 167, 1); height: 40px; width: 80px;">
+                    Clear
+                </button>
+            </div>
+        </div>
+
+    </form>
+    <div id="orderTable"></div>
+
+
+
+    <div class="modal " id="newtaxModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal modal-dialog-centered">
+            <div class="modal-content">
+                <form id="AddTax">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-secondary" id="exampleModalLabel">Add New Tax</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+
+                        <!-- Category Dropdown -->
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+<script>
+
+
+</script>

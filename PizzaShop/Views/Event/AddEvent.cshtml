@@ -1,0 +1,276 @@
+@model Entities.ViewModel.EventVM
+
+@{
+    ViewData["Title"] = "Add User Page";
+    @* if (TempData["Message"] != null)
+    {
+        @TempData["Message"]
+    } *@
+}
+
+
+<!-- Overlay for small screens -->
+<div class="overlay" id="overlay"></div>
+
+<div class="content pe-0" id="content">
+    <!-- Main content goes here -->
+
+    <div class=" d-flex align-items-center gap-3 justify-content-end pe-0">
+        <div class="col">
+            <h1 style="color:rgba(0, 102, 167, 1)">Add New Event</h1>
+        </div>
+        <div class=" text-end">
+            <a class="btn finalcancelbtn allbodybgcolor" asp-area="" asp-controller="Home" asp-action="EventBooking">
+                <i class="fa-solid fa-chevron-left"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <div class=" mb-2 shadow-lg rounded p-4 mt-3">
+        <form class="position-relative d-flex flex-column justify-content-center" id="checkavailability" method="post"
+            enctype="multipart/form-data">
+            <div class="row mb-2">
+                <span class="text-secondary fs-4 fw-semibold">Event Date And Time</span>
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="date" id="eventDate" asp-for="EventDate" class="form-control">
+                        <label for="eventDate" class="fw-semibold text-secondary">Event Date</label>
+                        <span asp-validation-for="EventDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <select id="eventType" name="EventType" asp-for="EventType" class="form-select">
+                            <option value="">Select event type</option>
+                            <option value="Birthday Party">Birthday Party</option>
+                            <option value="Kitty Party">Kitty Party</option>
+                            <option value="Kids Party">Kids Party</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <label for="floatingSelect" class="fw-semibold text-secondary">Event Type</label>
+                        <span asp-validation-for="EventType" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col d-none OtherEventType">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" asp-for="EventType" placeholder="0">
+                        <label for="floatingInput" class="fw-semibold text-secondary">Event Type</label>
+                        <span asp-validation-for="EventType" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col ">
+                    <div class="form-floating mb-3">
+                        <input type="time" id="EventStartTime" name="EventStartTime" asp-for="EventStartTime"
+                            class="form-control" min="09:00" max="21:00">
+                        <label for="floatingInput" class="fw-semibold text-secondary">Event Start Timer</label>
+                        <span asp-validation-for="EventStartTime" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col ">
+                    <div class="form-floating mb-3">
+                        <input type="time" id="EventEndTime" name="EventEndTime" asp-for="EventEndTime"
+                            class="form-control" min="09:00" max="21:00">
+                        <label for="EventEndTime" class="fw-semibold text-secondary">Event End Timer</label>
+                        <span asp-validation-for="EventEndTime" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col ">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" asp-for="Noofperson" placeholder="0">
+                        <label for="floatingInput" class="fw-semibold text-secondary">No of Person</label>
+                        <span asp-validation-for="Noofperson" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex align-items-center">
+                <div class="col-4">
+                    <div class="form-floating mb-3">
+                        <select id="orderType" asp-for="OrderType" name="OrderType" class="form-select">
+                            <option value="">Select event type</option>
+                            <option value="Dine-In">Dine-In</option>
+                            <option value="Take Away">Take Away</option>
+                        </select>
+                        <label for="floatingSelect" class="fw-semibold text-secondary">Event Type</label>
+                        <span asp-validation-for="OrderType" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col ">
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input eventtoggle  modal-field" asp-for="Isac" type="checkbox"
+                            style="border-radius: 1rem !important;" id="toggleSwitch">
+                        <label for="modifierGroups" class="form-label mt-1 ms-3">AC / Non AC</label>
+                        <span asp-validation-for="Isac" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex gap-2 justify-content-end border-bottom border-2 pb-3">
+                <div class=" ">
+                    <button type="submit" class="btn finalsavebtn  px-3">Check Availability
+                    </button>
+                </div>
+                <div class="">
+                    <button type="button" class="btn finalcancelbtn px-4" onclick="this.form.reset()">Reset</button>
+                </div>
+
+            </div>
+        </form>
+
+        <form class="position-relative d-flex flex-column justify-content-center mt-3 disabled" asp-action="Addcustomer"
+            method="post" enctype="multipart/form-data">
+            <div class="row mb-2">
+                <span class="text-secondary fs-4 fw-semibold">Customer Details</span>
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" asp-for="Name" placeholder="0">
+                        <label for="floatingInput" class="fw-semibold text-secondary">Name</label>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" asp-for="Email" placeholder="0">
+                        <label for="floatingInput" class="fw-semibold text-secondary">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col ">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" asp-for="Phone" placeholder="0">
+                        <label for="floatingInput" class="fw-semibold text-secondary">Phone No.</label>
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col ">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" asp-for="SpecialInstruction" placeholder="0">
+                        <label for="floatingInput" class="fw-semibold text-secondary">Special Instruction</label>
+                        <span asp-validation-for="SpecialInstruction" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex align-items-center">
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" asp-for="BillingAddress" placeholder="0">
+                        <label for="floatingInput" class="fw-semibold text-secondary">Billing Address</label>
+                        <span asp-validation-for="BillingAddress" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex gap-2 justify-content-end border-bottom border-2 pb-3">
+                <div class=" ">
+                    <button type="submit" class="btn finalsavebtn  px-3">Next
+                    </button>
+                </div>
+                <div class="">
+                    <button type="button" class="btn finalcancelbtn px-4" onclick="this.form.reset()">Cancel</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        var val;
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+        val = tomorrow.toISOString().split('T')[0];
+        document.getElementById('eventDate').setAttribute('min', tomorrow);
+        const startTimeInput = document.getElementById('EventStartTime');
+        const endTimeInput = document.getElementById('EventEndTime');
+
+        function setDefaultEndTime() {
+            const startTime = startTimeInput.value;
+            if (startTime) {
+                // Parse the start time (HH:MM) and add 1 hour
+                const [hours, minutes] = startTime.split(':').map(Number);
+                const endHours = (hours + 1) % 24; // Add 1 hour, wrap around at 24
+                const endTime = `${endHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                
+                endTimeInput.value = endTime; // Set the calculated end time
+            }
+        }
+
+        // Set default end time on page load
+        setDefaultEndTime();
+
+        // Update end time dynamically when start time changes
+        startTimeInput.addEventListener('input', setDefaultEndTime);
+        // Update end time dynamically when end time changes
+        endTimeInput.addEventListener('input', function () {
+            const startTime = startTimeInput.value;
+            const endTime = endTimeInput.value;
+
+            if (startTime && endTime) {
+                const [startHours, startMinutes] = startTime.split(':').map(Number);
+                const [endHours, endMinutes] = endTime.split(':').map(Number);
+
+                // Check if the end time is less than or equal to the start time
+                if (endHours < startHours || (endHours === startHours && endMinutes <= startMinutes)) {
+                    toastr.warning("End time must be greater than start time", "Warning");
+                    // Reset the end time to the default value
+                    setDefaultEndTime();
+                }
+            }
+        });
+
+        $('#eventType').change(function () {
+            var eventType = $(this).val();
+            console.log(eventType);
+            if (eventType == "Other") {
+                $('.OtherEventType').removeClass('d-none');
+            }
+            else {
+                $('.OtherEventType').addClass('d-none');
+            }
+        });
+        $('#checkavailability').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this)[0];
+            var submissionData = new FormData(formData);
+
+            @* $.ajax({
+                        url: '/Event/CheckAvailability',
+                        type: 'POST',
+                        data: submissionData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.success === true) {
+                                toastr.success('Customer Added Successfully!', "Success");
+                                window.location.href = '/AccountManagerOrderApp/MenuOrderApp?customerId=' + response.customerId;
+                            } else {
+                                toastr.warning("Customer has already Running Order", "Warning");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', xhr.responseText);
+                        }
+                    }); *@
+                });
+    });
+
+
+</script>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,47 @@
+@model IEnumerable<Entities.Models.Role>
+
+@{
+    ViewData["Title"] = "Role And Permission Page";
+}
+
+
+<!-- Overlay for small screens -->
+<div class="overlay" id="overlay"></div>
+
+
+<div class="content mt-3" id="content">
+    <!-- Main content goes here -->
+    <div class="row d-flex mb-2 mt-5">
+
+        <div class="col-md-8 ms-2">
+            <div class="bg-white p-5 table-responsive overflow-x-auto">
+                <table id="table" class="table align-middle">
+                    <thead class="bg-light mb-2">
+                        <tr>
+                            <th class="border-top-0 fs-5 text-secondary">Role</th>
+                            <th class="text-end border-top-0 fs-5 pe-5 text-secondary">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <p class="fw-normal mb-1  text-secondary">@item.RoleName</p>
+                                </td>
+                                <td>
+                                    <a class="text-black d-flex justify-content-end pe-5" asp-area=""
+                                        asp-controller="RoleAndPermission" asp-action="Permission"
+                                        asp-route-id="@item.RoleId">
+                                        <i class="bi bi-pen"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

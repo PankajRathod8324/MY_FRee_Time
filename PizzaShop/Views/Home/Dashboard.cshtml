@@ -1,0 +1,156 @@
+@{
+    ViewData["Title"] = "Dashboard Page";
+    @if (TempData["Message"] != null)
+    {
+        @TempData["Message"]
+    }
+}
+
+<style>
+    .card {
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    canvas {
+        max-height: 300px;
+    }
+</style>
+
+
+
+<!-- Overlay for small screens -->
+<div class="overlay" id="overlay"></div>
+
+<div class="content pe-0" id="content">
+    <!-- Main content goes here -->
+    <div class="d-flex justify-content-between align-items-center mt-4 w-100">
+        <div>
+            <h1 class="webybtn">Dashboard </h1>
+        </div>
+        <div class="col-12  col-sm-6 col-md-3 col-lg-3 mb-3">
+            <div class="d-flex justify-content-end justify-content-start pe-sm-4">
+                <div class="w-100" style="max-width: 200px;">
+                    <select class="form-select" id="datefilter" name="datefilter">
+                        <option value="Last 7 Days">Last 7 Days</option>
+                        <option value="Today">Today</option>
+                        <option value="Last 30 Days">Last 30 Days</option>
+                        <option value="Current Month">Current Month</option>
+                        <option value="Current Year">Current Year</option>
+                        <option value="Custome Date">Custome Date</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="showdashboarddata">
+
+    </div>
+
+    <div class="modal fade" id="CustomeDate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-secondary" id="exampleModalLabel">Select Date Range</h5>
+                    <button type="button" class="close btnCancel" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="form-floating ">
+                                <input type="date" id="startDate" name="startDate" class="form-control">
+                                <label>Start Date</label>
+                            </div>
+                        </div>
+
+                        <div class="col text-end">
+                            <div class="form-floating ">
+                                <input type="date" id="endDate" name="endDate" class="form-control">
+                                <label>End Date</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex align-item-center justify-content-center">
+                    <button type="submit" class="btn text-white text-center datesubmit"
+                        style="background-color: rgba(0, 102, 167, 1); border-color: rgba(0, 102, 167, 1);">
+                        Submit
+                    </button>
+                    <button type="button" class="btn ms-4 btnCancel"
+                        style="background-color: white; border-color: rgba(0, 102, 167, 1); color: rgba(0, 102, 167, 1);"
+                        data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    $(document).ready(function () {
+        loaddashboard();
+
+        $("#datefilter").change(function () {
+            var datefilter = $(this).val();
+            if (datefilter == "Custome Date") {
+                $("#CustomeDate").modal("show");
+            }
+            else {
+                loaddashboard();
+            }
+        });
+
+        $(".btnCancel").click(function () {
+            $("#datefilter").val("Last 7 Days");
+            loaddashboard();
+        });
+
+        $(".datesubmit").click(function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            if (startDate == "" || endDate == "") {
+                alert("Please select both start and end dates.");
+                return;
+            }
+            else {
+                loaddashboard();
+                $("#CustomeDate").modal("hide");
+            }
+        });
+
+        function loaddashboard() {
+            var datefilter = $("#datefilter").val();
+            if (datefilter == "Custome Date") {
+                var startDate = $("#startDate").val();
+                var endDate = $("#endDate").val();
+            }
+            else {
+                var startDate = null;
+                var endDate = null;
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Dashboard/Index',
+                data: { datefilter: datefilter, startDate: startDate, endDate: endDate },
+                success: function (data) {
+                    $("#showdashboarddata").html(data);
+                }
+            });
+        }
+
+    });
+</script>

@@ -1,0 +1,240 @@
+@model Entities.ViewModel.TaxVM
+
+@{
+    ViewData["Title"] = "Tax And Page";
+    if (TempData["Message"] != null)
+    {
+        <div class="alert alert-@TempData["MessageType"]">@TempData["Message"]</div>
+    }
+}
+
+
+<!-- Overlay for small screens -->
+<div class="overlay" id="overlay"></div>
+
+<div class="content pe-0" id="content">
+    <!-- Main content goes here -->
+    @* data-id="@Model.SectionId" *@
+    <form method="get" id="searchForm">
+        <div class="row d-flex mb-2 align-item-center justify-content-center ms-0 me-0 rounded">
+            <div class="hidden Categoryid" id="Categoryidsearch"></div>
+            <div class="col ">
+                <h1 class="webybtn">Taxes/Fees </h1>
+            </div>
+            <div class="col d-flex align-items-center gap-3 justify-content-end pe-0">
+
+
+
+                <div class="position-relative">
+                    <input class="form-control" type="search" name="search" placeholder="Search by First Name"
+                        id="searchInput" style="height: 60px; padding-right: 40px;">
+                    <i class="fa fa-search position-absolute text-primary"
+                        style="top: 50%; right: 10px; transform: translateY(-50%);"></i>
+                </div>
+                <div class="col-auto text-end">
+                    <a>
+                        <button class="btn btn-lg btn-primary px-4 addBtn" type="submit"
+                            style="height: 60px; border-radius: 0; white-space: nowrap; background-color: #0066b2 !important; font-size: 17px;">
+                            <i class="fa-solid fa-plus"></i>New Tax
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div id="taxTable"></div>
+
+
+
+    <div class="modal" id="newtaxModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <form id="AddTax">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="modal-header border-bottom-0">
+                        <h5 class="modal-title text-secondary" id="exampleModalLabel">Add New Tax</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+
+                        <!-- Category Dropdown -->
+                        <div class="row d-flex justify-space-between">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" asp-for="TaxName" class="form-control" id="floatingInput">
+                                        <label for="floatingInput" asp-for="TaxName">Name*</label>
+                                        <span asp-validation-for="TaxName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-floating"> <select class="form-select" asp-for="TaxTypeId"
+                                            asp-items="ViewBag.Taxtypes" id="floatingSelect"
+                                            aria-label="Floating label select example">
+                                            <option selected>Tax Type</option>
+                                        </select>
+                                        <label for="floatingSelect">Type*</label>
+                                        <span asp-validation-for="TaxTypeId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" asp-for="TaxAmount" class="form-control" id="floatingInput">
+                                        <label for="floatingInput" asp-for="TaxName">Tax Amount*</label>
+                                        <span asp-validation-for="TaxAmount" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <!-- Switch Toggles -->
+                                <div class="col-4">
+                                    <div class=" form-switch d-flex align-item-center justify-space-between gap-2 ">
+                                        <input class="form-check-input" type="checkbox" id="toggleSwitch"
+                                            name="IsEnabled" asp-for="IsEnabled"
+                                            style="border-radius: 1rem !important;">
+                                        <label for="floatingInput" asp-for="IsEnabled"
+                                            class="form-label mt-1 ms-3">IsEnabled</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class=" form-switch d-flex align-item-center justify-space-between gap-2 ">
+                                        <input class="form-check-input" type="checkbox" id="toggleSwitch"
+                                            name="IsDefault" asp-for="IsDefault"
+                                            style="border-radius: 1rem !important;">
+                                        <label for="floatingInput" asp-for="IsDefault"
+                                            class="form-label mt-1 ms-3">Default</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0">
+                        <button type="submit" class="btn  webybg fs-6 fw-bold text-white px-4">Save</button>
+                        <button type="button" class="btn  webyborder webybtn fw-bold px-4"
+                            data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Handle Page Size Change
+        $("#pageSizeDropdown").change(function () {
+            console.log("Dropdown changed");
+            loadTaxes(1); // Reset to page 1 when changing page size
+        });
+        $("#searchInput").keyup(function () {
+            loadTaxes(1); // Reset to page 1 on search
+        });
+
+        // Handle Pagination
+        $(document).on("click", ".pagination-btn", function (e) {
+            e.preventDefault();
+            var page = $(this).data("page"); // Get page number from button
+            loadTaxes(page);
+        });
+        $.ajax({
+            url: '/TaxAndFee/Tax',  // Ensure this route matches your controller
+            type: 'GET',
+            success: function (data) {
+                $("#taxTable").html(data);  // Update the menu items container
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching items:', error);
+            }
+        });
+        $(".addBtn").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/TaxAndFee/AddPermission',
+                type: 'POST',
+                contentType: "application/json",
+                success: function (response) {
+                    $("#newtaxModal").modal("show");
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('You do not have Permission', "UnAuthorise");// Log detailed error
+                }
+            });
+        });
+        $("#AddTax").submit(function (event) {
+            event.preventDefault();
+            @* e.stopPropagation(); *@
+                console.log("Submitting AddTax form");
+
+            // Serialize form fields
+            var formData = $(this).serializeArray();
+            var formDataobj = {};
+
+            // Convert serialized array into an object
+            $.each(formData, function (index, field) {
+                formDataobj[field.name] = field.value;
+            });
+
+            formDataobj["IsEnabled"] = $("#toggleSwitch[name='IsEnabled']").prop("checked");
+            formDataobj["IsDefault"] = $("#toggleSwitch[name='IsDefault']").prop("checked");
+
+
+            var submissionData = JSON.stringify(formDataobj); // Final JSON string
+
+            console.log("Sending data:", submissionData);
+
+            if ($(this).valid()) {
+                $.ajax({
+                    url: '/TaxAndFee/AddTax',
+                    type: 'POST',
+                    contentType: "application/json",
+                    data: submissionData,
+                    success: function (response) {
+                        var myModal = bootstrap.Modal.getInstance(document.getElementById("newtaxModal"));
+                        if (myModal) myModal.hide();
+                        document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
+                        toastr.success('Tax Added Successfully!', "Success");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', xhr.responseText); // Log detailed error
+                    }
+                });
+            }
+        });
+
+    });
+    function loadTaxes(page = 1) {
+        var search = $("#searchInput").val();
+        @* var sortOrder = $("#sortOrder").val(); *@
+            var pageSize = $("#pageSizeDropdown").val();
+
+        console.log("Page:", page, "PageSize:", pageSize);
+
+        $.ajax({
+            url: '/TaxAndFee/Tax',  // Ensure this route matches your controller
+            type: 'GET',
+            data: {
+                search: search,
+                page: page,
+                pageSize: pageSize
+            },
+            success: function (data) {
+                $("#taxTable").html(data);  // Update the menu items container
+
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching items:', error);
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,71 @@
+@{
+    ViewData["Title"] = "Table And Section Page";
+}
+
+<!-- Overlay for small screens -->
+<div class="overlay" id="overlay"></div>
+
+
+<div class="content pe-0" id="content">
+    <!-- Main content goes here -->
+    <div class="row d-flex mb-4">
+        <div class="row">
+            <div class="col-6 ">
+                <h1 class=" d-flex justify-content-start webybtn">Sections/Tables </h1>
+
+            </div>
+            <div class="col d-flex justify-content-end">
+                <a asp-action="" asp-controller="" asp-action="">
+                    <button class="btn btn-outline-primary  " type="submit"> <i
+                            class="fa-solid fa-chevron-left"></i>Back</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row mainbody d-flex ">
+
+
+        <div id="sectionbody">
+
+        </div>
+
+
+        <div id="tablebody">
+        </div>
+
+
+
+    </div>
+
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        console.log("Hiiii");
+        $.ajax({
+            url: '@Url.Action("Section", "TableAndSection")',
+            type: 'GET',
+            success: function (data) {
+                $('#sectionbody').append(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('error Feching items:', error);
+            }
+        });
+    });
+
+    @* $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("MenuModifierGroup", "Menu")',
+            type: 'GET',
+            success: function (data) {
+                $('#myTab2').append(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('error Feching items:', error);
+            }
+        });
+    }); *@
+
+</script>
