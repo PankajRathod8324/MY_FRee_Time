@@ -47,14 +47,15 @@ public class UserService : IUserService
         if (user != null && user.IsDeleted == false && user.IsActive == true && BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
             var userRole = _userRepository.GetUserRole(email);
-            if(user.LastLogin == null)
+            if (user.LastLogin == null)
             {
                 return "Hii";
             }
-            else{
+            else
+            {
                 return GenerateJwtToken(email, userRole);
             }
-            
+
         }
         if (user.IsActive == false && BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
@@ -71,7 +72,7 @@ public class UserService : IUserService
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, email),
-            new Claim("role", role)
+            new Claim(ClaimTypes.Role, role)
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -278,8 +279,9 @@ public class UserService : IUserService
 
         if (!string.IsNullOrEmpty(filterOptions.Search))
         {
-            string searchLower = filterOptions.Search.ToLower();
-            users = users.Where(u => u.FirstName.ToLower().Contains(searchLower));
+            string searchLower = filterOptions.Search?.Trim().ToLower();
+            users = users.Where(u => u.FirstName.Trim().ToLower().Contains(searchLower));
+
         }
 
         users = filterOptions.SortBy?.ToLower() switch

@@ -1,5 +1,6 @@
 using System.Data;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using DAL.Interfaces;
 using Dapper;
 using Entities.Models;
@@ -239,20 +240,40 @@ public class AccountManagerOrderAppRepository : IAccountManagerOrderAppRepositor
     public List<WaitingListVM> GetAllWaitingListCustomer(int sectionId)
     {
         TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+
         var waitingListData = _context.WaitingLists
             .Where(sectionId == 0 ? temp => temp.IsDeleted == false : temp => temp.SectionId == sectionId && temp.IsDeleted == false)
-            .Select(temp => new WaitingListVM
+            .Select(temp => new
             {
-                SectionId = temp.SectionId,
-                Name = temp.Name,
-                WaitingListId = temp.WaitingListId,
-                Email = temp.Email,
-                NoOfPerson = temp.NoOfPerson,
-                Phone = temp.Phone,
-                CreatedAt = TimeZoneInfo.ConvertTimeFromUtc((DateTime)temp.CreatedAt, timeZone),
-                Duration = DateTime.Now - TimeZoneInfo.ConvertTimeFromUtc((DateTime)temp.CreatedAt, timeZone),
-            }).ToList();
+                temp.SectionId,
+                temp.Name,
+                temp.WaitingListId,
+                temp.Email,
+                temp.NoOfPerson,
+                temp.Phone,
+                temp.CreatedAt
+            })
+            .AsEnumerable() // switch to LINQ-to-Objects so we can use DateTime logic safely
+            .Select(temp =>
+            {
+                DateTime createdAtUtc = DateTime.SpecifyKind((DateTime)temp.CreatedAt, DateTimeKind.Utc);
+                DateTime createdAtIST = TimeZoneInfo.ConvertTimeFromUtc(createdAtUtc, timeZone);
+                return new WaitingListVM
+                {
+                    SectionId = temp.SectionId,
+                    Name = temp.Name,
+                    WaitingListId = temp.WaitingListId,
+                    Email = temp.Email,
+                    NoOfPerson = temp.NoOfPerson,
+                    Phone = temp.Phone,
+                    CreatedAt = createdAtIST,
+                    Duration = DateTime.Now - createdAtIST,
+                };
+            })
+            .ToList();
+
         return waitingListData;
+
     }
 
     public WaitingListVM GetWaitingData(int waitingId)
@@ -368,7 +389,8 @@ public class AccountManagerOrderAppRepository : IAccountManagerOrderAppRepositor
 
     public List<MenuCategoryVM> GetFavouriteItems()
     {
-        string useremail = _httpContextAccessor.HttpContext.Request.Cookies["Email"];
+        var httpContext = _httpContextAccessor.HttpContext;
+        string useremail = httpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
         var user = _context.Users.FirstOrDefault(u => u.Email == useremail);
         var favouriteItems = _context.Favourites
             .Where(f => f.UserId == user.UserId)

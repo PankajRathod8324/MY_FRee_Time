@@ -95,56 +95,86 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(key),
-            // RoleClaimType = ClaimTypes.Role
-            RoleClaimType = "role"
-
+            RoleClaimType = ClaimTypes.Role,
         };
+
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
-                context.Token = context.Request.Cookies["JwtToken"];
+                context.Token = context.Request.Cookies["AuthToken"];
                 return Task.CompletedTask;
             },
+            OnAuthenticationFailed = context =>
+            {
+                if (context.Exception is SecurityTokenExpiredException)
+                {
+                    context.Response.Redirect("/Loginpage");
+                }
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                if (!context.Response.HasStarted)
+                {
+                    context.Response.Redirect("/Loginpage");
+                }
+                context.HandleResponse(); // prevents default 401 response
+                return Task.CompletedTask;
+            }
         };
     });
 
+// builder.Services.AddControllersWithViews(options =>
+// {
+// var policy = new AuthorizationPolicyBuilder()
+//     .RequireAuthenticatedUser()
+//     .Build();
+// options.Filters.Add(new AuthorizeFilter(policy));
+// });
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/AccessDenied";
-        options.AccessDeniedPath = "/AccessDenied";
 
-    });
+// builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//     .AddCookie(options =>
+//     {
+//         options.LoginPath = "/AccessDenied";
+//         options.AccessDeniedPath = "/AccessDenied";
+
+//     });
 
 
 builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
-// 🔥 Configure Role-Based Authorization
+// -------------------- Role/Permission Policies --------------------
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("SuperAdminPolicy", policy => policy.RequireClaim("role", "Super Admin"));
-    options.AddPolicy("AccountManagerPolicy", policy => policy.RequireClaim("role", "Account Manager"));
-    options.AddPolicy("ChefPolicy", policy => policy.RequireClaim("role", "Chef"));
-    options.AddPolicy("ChefOrAccountManagerPolicy", policy => policy.RequireClaim("role", "Chef", "Account Manager"));
-});
+    // Role-based
+    options.AddPolicy("SuperAdminPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Super Admin"));
+    options.AddPolicy("AccountManagerPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Account Manager"));
+    options.AddPolicy("ChefPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Chef"));
+    options.AddPolicy("ChefOrAccountManagerPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Chef", "Account Manager"));
 
-using (var scope = builder.Services.BuildServiceProvider().CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<PizzaShopContext>();
-    var requiredPermissions = context.Permissions.Select(p => p.PermissionName).Distinct().ToList(); // Fetch unique permissions
-
-    builder.Services.AddAuthorization(options =>
+    // Permission-based
+    using (var scope = builder.Services.BuildServiceProvider().CreateScope())
     {
+        var context = scope.ServiceProvider.GetRequiredService<PizzaShopContext>();
+        var requiredPermissions = context.Permissions
+            .Select(p => p.PermissionName)
+            .Distinct()
+            .ToList();
+
         foreach (var permission in requiredPermissions)
         {
-            options.AddPolicy($"{permission}ViewPolicy", policy => policy.Requirements.Add(new PermissionRequirement($"{permission}_View")));
-            options.AddPolicy($"{permission}EditPolicy", policy => policy.Requirements.Add(new PermissionRequirement($"{permission}_Edit")));
-            options.AddPolicy($"{permission}DeletePolicy", policy => policy.Requirements.Add(new PermissionRequirement($"{permission}_Delete")));
+            options.AddPolicy($"{permission}ViewPolicy", policy =>
+                policy.Requirements.Add(new PermissionRequirement($"{permission}_View")));
+            options.AddPolicy($"{permission}EditPolicy", policy =>
+                policy.Requirements.Add(new PermissionRequirement($"{permission}_Edit")));
+            options.AddPolicy($"{permission}DeletePolicy", policy =>
+                policy.Requirements.Add(new PermissionRequirement($"{permission}_Delete")));
         }
-    });
-}
+    }
+});
+
 
 
 

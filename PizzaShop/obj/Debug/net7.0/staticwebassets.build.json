@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "lqqxPnPMA2toLY5potD1Cjubxpb2AyWAEeynPV+C39I=",
+  "Hash": "kgCXW0d1y7CKxr/cPp+mnm0TUQrCT0IVcSKE6IAn1yY=",
   "Source": "PizzaShop",
   "BasePath": "_content/PizzaShop",
   "Mode": "Default",
@@ -2236,8 +2236,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "h8f1fvt36m",
-      "Integrity": "Yd7I7mLtSogySGpAX0NNITM8tGaXRb16+rWOmw9aAOk=",
+      "Fingerprint": "od5rsrnbt3",
+      "Integrity": "/GsAnWhfOkx4Zf2/eXZQ0oYVoDEizwCx3qKcCvtIfHA=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\userPage.js"
@@ -11930,51 +11930,6 @@
       ]
     },
     {
-      "Route": "js/userPage.h8f1fvt36m.js",
-      "AssetFile": "D:\\PizzaShop_N_Tier-main (1)\\PizzaShop_N_Tier-main\\PizzaShop\\wwwroot\\js\\userPage.js",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "2714"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/javascript"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"Yd7I7mLtSogySGpAX0NNITM8tGaXRb16+rWOmw9aAOk=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 22 May 2025 18:25:38 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "h8f1fvt36m"
-        },
-        {
-          "Name": "label",
-          "Value": "js/userPage.js"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-Yd7I7mLtSogySGpAX0NNITM8tGaXRb16+rWOmw9aAOk="
-        }
-      ]
-    },
-    {
       "Route": "js/userPage.js",
       "AssetFile": "D:\\PizzaShop_N_Tier-main (1)\\PizzaShop_N_Tier-main\\PizzaShop\\wwwroot\\js\\userPage.js",
       "Selectors": [],
@@ -11985,7 +11940,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2714"
+          "Value": "2986"
         },
         {
           "Name": "Content-Type",
@@ -11993,11 +11948,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"Yd7I7mLtSogySGpAX0NNITM8tGaXRb16+rWOmw9aAOk=\""
+          "Value": "\"/GsAnWhfOkx4Zf2/eXZQ0oYVoDEizwCx3qKcCvtIfHA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 22 May 2025 18:25:38 GMT"
+          "Value": "Thu, 22 May 2025 19:34:17 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -12007,7 +11962,52 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-Yd7I7mLtSogySGpAX0NNITM8tGaXRb16+rWOmw9aAOk="
+          "Value": "sha256-/GsAnWhfOkx4Zf2/eXZQ0oYVoDEizwCx3qKcCvtIfHA="
+        }
+      ]
+    },
+    {
+      "Route": "js/userPage.od5rsrnbt3.js",
+      "AssetFile": "D:\\PizzaShop_N_Tier-main (1)\\PizzaShop_N_Tier-main\\PizzaShop\\wwwroot\\js\\userPage.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2986"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/GsAnWhfOkx4Zf2/eXZQ0oYVoDEizwCx3qKcCvtIfHA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 22 May 2025 19:34:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "od5rsrnbt3"
+        },
+        {
+          "Name": "label",
+          "Value": "js/userPage.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/GsAnWhfOkx4Zf2/eXZQ0oYVoDEizwCx3qKcCvtIfHA="
         }
       ]
     },
@@ -16171,7 +16171,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 22 May 2025 18:25:39 GMT"
+          "Value": "Thu, 22 May 2025 18:41:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16216,7 +16216,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 22 May 2025 18:25:39 GMT"
+          "Value": "Thu, 22 May 2025 18:41:03 GMT"
         },
         {
           "Name": "Cache-Control",

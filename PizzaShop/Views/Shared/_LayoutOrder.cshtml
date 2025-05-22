@@ -8,22 +8,11 @@
 
 @{
 
-    @* var userDataJson = HttpContextAccessor.HttpContext.Session.GetString("UserData");
-    var userEmail = HttpContextAccessor.HttpContext.Session.GetString("UserEmail");
-    User user = !string.IsNullOrEmpty(userDataJson) ? JsonConvert.DeserializeObject<User>(userDataJson) : null;
-    if (!string.IsNullOrEmpty(userDataJson))
-    {
-        user = JsonConvert.DeserializeObject<User>(userDataJson);
-    } *@
+     var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
-    var userEmail = HttpContextAccessor.HttpContext.Request.Cookies["email"];
-    var userPhoto = HttpContextAccessor.HttpContext.Request.Cookies["ProfilePhoto"];
-    var userName = HttpContextAccessor.HttpContext.Request.Cookies["Name"];
-
-    @* User user = null; *@
 
     // Fetch user details from the database based on email
-    var user = _userService.GetUserByEmail(userEmail); // Call your service method
+    var user = _userService.GetUserByEmail(userEmail!); // Call your service method
 
     var isChef = user.RoleId == 1;
     var isAccountManager = user.RoleId == 3;
@@ -247,17 +236,17 @@
                         <div class="dropdown">
                             <a class="nav-link d-flex align-items-center dropdown-toggle" href="#" id="userDropdown"
                                 role="button">
-                                <img src="@userPhoto" alt="User Image" class="rounded-circle me-2"
+                                <img src="@user.ProfilePhoto" alt="User Image" class="rounded-circle me-2"
                                     style="width: 45px; height: 45px;">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow p-3" aria-labelledby="userDropdown"
                                 data-bs-auto-close="outside">
                                 <!-- Profile Section -->
                                 <li class="d-flex align-items-center p-2 border-bottom">
-                                    <img src="@userPhoto" alt="User Image" class="rounded-circle me-2"
+                                    <img src="@user.ProfilePhoto" alt="User Image" class="rounded-circle me-2"
                                         style="width: 40px; height: 40px;">
                                     <div>
-                                        <p class="mb-0 fw-bold">@userName</p>
+                                        <p class="mb-0 fw-bold">@user.FirstName</p>
                                         <small class="text-muted">@userEmail</small>
                                     </div>
                                 </li>

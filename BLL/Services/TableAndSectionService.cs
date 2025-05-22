@@ -119,12 +119,14 @@ public class TableAndSectionService : ITableAndSectionService
     {
         var tables = _tableandsectionRepository.GetTablesBySectionId(sectionId).AsQueryable();
 
-        if (!string.IsNullOrEmpty(filterOptions.Search))
+       if (!string.IsNullOrEmpty(filterOptions.Search))
         {
-            string searchLower = filterOptions.Search.ToLower();
-            tables = tables.Where(u => u.TableName.ToLower().Contains(searchLower) ||
-                                     u.Status.StatusName.ToLower().Contains(searchLower));
+            string searchLower = filterOptions.Search.Trim().ToLower();
+
+            tables = tables.Where(u => u.TableName.Trim().ToLower().Contains(searchLower) ||
+                                       u.Status.StatusName.Trim().ToLower().Contains(searchLower));
         }
+
 
         // Get total count and handle page size dynamically
         int totalTables = tables.Count();
