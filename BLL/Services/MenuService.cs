@@ -43,6 +43,10 @@ public class MenuService : IMenuService
     {
         return _menuRepository.GetAllCategories();
     }
+    public IEnumerable<MenuItem> GetAllItems()
+    {
+        return _menuRepository.GetAllItems();
+    }
 
     public MenuCategory GetCategoryById(int id)
     {

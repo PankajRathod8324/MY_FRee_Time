@@ -10,9 +10,9 @@ namespace Entities.ViewModel
 
         public int ModifierId { get; set; }
 
-        public string UId { get; set; }
+        public string? UId { get; set; }
 
-        public string ItemName { get; set; }
+        public string? ItemName { get; set; }
 
         public int Readyitemquantity { get; set; }
 
@@ -28,16 +28,16 @@ namespace Entities.ViewModel
 
         public int Quantity { get; set; }
 
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
-        public string ItemInstructions { get; set; }
+        public string? ItemInstructions { get; set; }
 
-        public string Status { get; set; }
+        public string? Status { get; set; }
         public int OrderId { get; set; }
-        public List<OrderModifierVM> Modifiers { get; set; }
+        public List<OrderModifierVM> Modifiers { get; set; } = new List<OrderModifierVM>();
          public List<OrderModifierVM> OrderModifiers { get; set; } = new List<OrderModifierVM>();
 
-        public List<MenuModifierGroupVM> MenuItemModifier { get; set; }
+        public List<MenuModifierGroupVM> MenuItemModifier { get; set; } = new List<MenuModifierGroupVM>();
 
 
 

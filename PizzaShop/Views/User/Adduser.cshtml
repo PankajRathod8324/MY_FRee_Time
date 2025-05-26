@@ -74,7 +74,7 @@
                     <div class="form-floating mb-3">
                         <input type="text" asp-for="FirstName" class="form-control" placeholder="Emily">
                         <label for="floatingInput" class="fw-semibold text-secondary" asp-for="FirstName">First
-                            Name</label>
+                            Name*</label>
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                     <div class="form-floating mb-3">
                         <input type="text" asp-for="LastName" class="form-control" placeholder="Emily">
                         <label for="floatingInput" class="fw-semibold text-secondary" asp-for="LastName">Last
-                            Name</label>
+                            Name*</label>
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     <div class="form-floating mb-3">
                         <input type="text" asp-for="UserName" class="form-control" placeholder="emily">
                         <label for="floatingInput" class="fw-semibold text-secondary"
-                            asp-for="UserName">Username</label>
+                            asp-for="UserName">Username*</label>
                         <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                     <div class="form-floating">
                         <select class="form-select" class="fw-semibold text-secondary" asp-for="RoleId"
                             asp-items="ViewBag.Roles" id="floatingSelect" aria-label="Floating label select example">
-                            <option selected class="fw-semibold text-secondary">Select Role</option>
+                            @* <option selected class="fw-semibold text-secondary">Select Role</option> *@
                         </select>
                         <label for="floatingSelect" class="fw-semibold text-secondary">Role</label>
                         <span asp-validation-for="RoleId" class="text-danger"></span>
@@ -111,7 +111,7 @@
                 <div class="col ">
                     <div class="form-floating mb-3">
                         <input type="email" asp-for="Email" class="form-control" placeholder="emily@yopmail.com">
-                        <label for="floatingInput" class="fw-semibold text-secondary" asp-for="Email">Email</label>
+                        <label for="floatingInput" class="fw-semibold text-secondary" asp-for="Email">Email*</label>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                     <div class="form-floating mb-3">
                         <input type="password" asp-for="Password" class="form-control" placeholder="clark">
                         <label for="floatingInput" class="fw-semibold text-secondary"
-                            asp-for="Password">Password</label>
+                            asp-for="Password">Password*</label>
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                 </div>
@@ -158,7 +158,7 @@
                             <option class="fw-semibold text-secondary" selected>Select Country</option>
                         </select>
                         <label for="countrySelect" class="fw-semibold text-secondary">Country</label>
-                        <span asp-validation-for="CountryId" class="text-danger"></span>
+                        @* <span asp-validation-for="CountryId" class="text-danger"></span> *@
                     </div>
                 </div>
                 <div class="col ">
@@ -168,7 +168,7 @@
                             <option class="fw-semibold text-secondary" selected>Select State</option>
                         </select>
                         <label for="stateSelect" class="fw-semibold text-secondary">State</label>
-                        <span asp-validation-for="StateId" class="text-danger"></span>
+                        @* <span asp-validation-for="StateId" class="text-danger"></span> *@
                     </div>
                 </div>
                 <div class="col">
@@ -178,7 +178,7 @@
                             <option class="fw-semibold text-secondary" selected>Select City</option>
                         </select>
                         <label class="fw-semibold text-secondary" for="citySelect">City</label>
-                        <span asp-validation-for="CityId" class="text-danger"></span>
+                        @* <span asp-validation-for="CityId" class="text-danger"></span> *@
                     </div>
                 </div>
             </div>
@@ -202,7 +202,7 @@
                     <div class="form-floating mb-3">
                         <input type="text" asp-for="PhoneNumber" class="form-control" placeholder="9801234599">
                         <label for="floatingInput" class="fw-semibold text-secondary"
-                            asp-for="PhoneNumber">Phone</label>
+                            asp-for="PhoneNumber">Phone*</label>
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>

@@ -324,7 +324,7 @@
                                             <select class="form-select modal-field" asp-for="CategoryId"
                                                 asp-items="ViewBag.Categories" id="floatingSelect"
                                                 aria-label="Floating label select example">
-                                                <option selected>Select a Category</option>
+                                                @* <option selected>Select a Category</option> *@
                                             </select>
                                             <label for="floatingSelect">Categories*</label>
                                             <span asp-validation-for="CategoryId" class="text-danger"></span>
@@ -349,7 +349,7 @@
                                         <div class="form-floating"> <select class="form-select modal-field" asp-for="ItemtypeId"
                                                 asp-items="ViewBag.Itemtypes" id="floatingSelect"
                                                 aria-label="Floating label select example">
-                                                <option selected>Select a type</option>
+                                                @* <option selected>Select a type</option> *@
                                             </select>
                                             <label for="floatingSelect">Item Type*</label>
                                             <span asp-validation-for="ItemtypeId" class="text-danger"></span>
@@ -359,7 +359,7 @@
                                     <!-- Rate -->
                                     <div class="col">
                                         <div class="form-floating mb-3">
-                                            <input type="text" asp-for="Rate" class="form-control modal-field" id="floatingInput">
+                                            <input type="number" asp-for="Rate" class="form-control modal-field" id="floatingInput">
                                             <label for="floatingInput" asp-for="Rate">Rate*</label>
                                             <span asp-validation-for="Rate" class="text-danger"></span>
                                         </div>
@@ -368,7 +368,7 @@
                                     <!-- Quantity -->
                                     <div class="col">
                                         <div class="form-floating mb-3">
-                                            <input type="text" asp-for="Quantity" class="form-control modal-field"
+                                            <input type="number" asp-for="Quantity" class="form-control modal-field"
                                                 id="floatingInput">
                                             <label for="floatingInput" asp-for="Quantity">Quantity*</label>
                                             <span asp-validation-for="Quantity" class="text-danger"></span>
@@ -380,7 +380,7 @@
                                         <div class="form-floating"> <select class="form-select modal-field" asp-for="UnitId"
                                                 asp-items="ViewBag.Units" id="floatingSelect"
                                                 aria-label="Floating label select example">
-                                                <option selected>Select a unit</option>
+                                                @* <option selected>Select a unit</option> *@
                                             </select>
                                             <label for="floatingSelect">Unit*</label>
                                             <span asp-validation-for="UnitId" class="text-danger"></span>
@@ -480,7 +480,7 @@
                         </div>
                         <div class="modal-footer d-flex jusify-content-end border-0">
                             <button type="submit" class="btn  webybg  fs-6 fw-bold text-white px-4 saveitembtn"
-                                disabled>Save</button>
+                                >Save</button>
                             <button type="button" class="btn  cancel-btn webyborder webybtn fw-bold px-4"
                                  data-target="newitemModal">Cancel</button>
                         </div>
@@ -676,9 +676,12 @@
                 });
 
             $('.addbtnicon').click(function () {
+                $('#addcategoryform')[0].reset();
                 $('#addCategoryModal').modal('show');
             });
             $('.newitemmodalbtn').click(function () {
+                $('#Additem')[0].reset();
+                $('#modifierList').empty(); // Clear previous modifiers
                 $('#newitemModal').modal('show');
             });
             $(".edit-btn").click(function (event) {
@@ -790,23 +793,27 @@
                     e.preventDefault();
                     var formData = $(this)[0];
                     var submissionData = new FormData(formData);
-                    $.ajax({
-                        url: '/Menu/AddMenuCategory',
-                        type: 'POST',
-                        data: submissionData,
-                        processData: false,
-                        contentType: false,
-                        success: function (response) {
-                            if (response.success === true) {
-                                toastr.success('Category Added Successfully!', "Success");
-                            } else {
-                                toastr.warning("Something has wrong", "Warning");
+                    if($(this).valid())
+                    {
+                        $.ajax({
+                            url: '/Menu/AddMenuCategory',
+                            type: 'POST',
+                            data: submissionData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success === true) {
+                                    toastr.success('Category Added Successfully!', "Success");
+                                } else {
+                                    toastr.warning("Something has wrong", "Warning");
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error:', xhr.responseText);
                             }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', xhr.responseText);
-                        }
-                    }); 
+                        }); 
+                    }
+                  
                 });
 
 
@@ -899,6 +906,34 @@
                             console.log("Sending data:", submissionData);
 
                             // Now that the image is added, send the AJAX request
+                            if($(this).valid())
+                            {
+                                $.ajax({
+                                    url: '/Menu/AddMenuItem',
+                                    type: 'POST',
+                                    contentType: "application/json",
+                                    data: submissionData,
+                                    success: function (response) {
+                                        alert("Item Added Successfully!");
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error:', xhr.responseText); // Log detailed error
+                                    }
+                                });
+                            }
+                            
+                        };
+
+                        // Read the image file as base64
+                        reader.readAsDataURL(fileInput);
+                    } else {
+                        // If no image is selected, still send the form data without the image
+                        formDataobj.ModifierGroupIds = JSON.stringify(selectedModifierGroups); // Convert array to JSON string
+                        var submissionData = JSON.stringify(formDataobj); // Final JSON string
+
+                        console.log("Sending data:", submissionData);
+                        if($(this).valid())
+                        {
                             $.ajax({
                                 url: '/Menu/AddMenuItem',
                                 type: 'POST',
@@ -911,29 +946,9 @@
                                     console.error('Error:', xhr.responseText); // Log detailed error
                                 }
                             });
-                        };
+                        }
 
-                        // Read the image file as base64
-                        reader.readAsDataURL(fileInput);
-                    } else {
-                        // If no image is selected, still send the form data without the image
-                        formDataobj.ModifierGroupIds = JSON.stringify(selectedModifierGroups); // Convert array to JSON string
-                        var submissionData = JSON.stringify(formDataobj); // Final JSON string
-
-                        console.log("Sending data:", submissionData);
-
-                        $.ajax({
-                            url: '/Menu/AddMenuItem',
-                            type: 'POST',
-                            contentType: "application/json",
-                            data: submissionData,
-                            success: function (response) {
-                                alert("Item Added Successfully!");
-                            },
-                            error: function (xhr, status, error) {
-                                console.error('Error:', xhr.responseText); // Log detailed error
-                            }
-                        });
+                       
                     }
                 });
 

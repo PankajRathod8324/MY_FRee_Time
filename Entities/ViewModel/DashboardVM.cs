@@ -9,8 +9,8 @@ namespace Entities.ViewModel
         public int TotalOrders { get; set; }
         public decimal AvgOrderValue { get; set; }
         public decimal AvgWaitingTime { get; set; }
-        public List<MenuCategoryVM> TopSellingItems { get; set; }
-        public List<MenuCategoryVM> LeastSellingItems { get; set; }
+        public List<MenuCategoryVM> TopSellingItems { get; set; } = new List<MenuCategoryVM>();
+        public List<MenuCategoryVM> LeastSellingItems { get; set; }  = new List<MenuCategoryVM>();
         public int NewCustomers { get; set; }
         public int WaitingListCount { get; set; }
     }

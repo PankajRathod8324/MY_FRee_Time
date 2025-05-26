@@ -9,6 +9,7 @@ namespace  BLL.Interfaces;
 public interface IMenuService
 {
   IEnumerable<MenuCategory> GetAllCategories();
+  IEnumerable<MenuItem> GetAllItems();
 
   MenuCategory GetCategoryById(int id);
 

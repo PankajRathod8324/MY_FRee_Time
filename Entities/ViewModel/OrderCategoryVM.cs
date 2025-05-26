@@ -6,8 +6,8 @@ namespace Entities.ViewModel
 {
     public class OrderCategoryVM
     {
-        public List<OrderVM> Orders { get; set; }
-        public List<Order> OrderList { get; set; }
+        public List<OrderVM> Orders { get; set; } = new List<OrderVM>();
+        public List<Order> OrderList { get; set; } = new List<Order>();
 
 
         public int? CategoryId { get; set; }
@@ -35,7 +35,7 @@ namespace Entities.ViewModel
 
         public string? CategoryPhoto { get; set; }
 
-        public string ItemPhoto {get; set;}
+        public string ItemPhoto {get; set;} = null!;
 
         public bool? IsFavourite { get; set; }
 
@@ -52,11 +52,11 @@ namespace Entities.ViewModel
 
         public int? ItemtypeId { get; set; }
 
-        public string Itemtype { get; set; }
+        public string Itemtype { get; set; } = null!;
 
         public int? ModifierGroupId { get; set; }
 
-        public string UnitName { get; set; }
+        public string UnitName { get; set; } = null!;
 
 
     }

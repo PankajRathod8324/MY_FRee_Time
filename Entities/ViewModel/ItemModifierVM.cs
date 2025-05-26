@@ -22,9 +22,9 @@ public partial class ItemModifierVM
     public int? MaxSelection { get; set; }
 
     
-    public List<ModifierVM> MenuModifiers { get; set; }
+    public List<ModifierVM> MenuModifiers { get; set; } = new List<ModifierVM>();
 
-    public List<MenuModifierGroupVM> MenuModifierGroupItem {get; set;}
+    public List<MenuModifierGroupVM> MenuModifierGroupItem {get; set;} = new List<MenuModifierGroupVM>();
 
  
 }

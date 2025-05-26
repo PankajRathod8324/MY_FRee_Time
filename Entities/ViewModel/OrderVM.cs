@@ -6,14 +6,14 @@ namespace Entities.ViewModel
 {
     public class OrderVM
     {
-        public List<Order> AllOrders { get; set; }
+        public List<Order> AllOrders { get; set; } = new List<Order>();
 
         public IPagedList<Order>? Orders { get; set; }
         public List<Order>? OrderList { get; set; }
 
-        public List<OrderItemVM> OrderItems { get; set; }
+        public List<OrderItemVM> OrderItems { get; set; } = new List<OrderItemVM>();
 
-        public List<MenuModifierGroupVM> MenuItemModifier { get; set; }
+        public List<MenuModifierGroupVM> MenuItemModifier { get; set; } = new List<MenuModifierGroupVM>();
 
         public List<OrderTableVM>? OrderTables { get; set; }
 
@@ -37,11 +37,11 @@ namespace Entities.ViewModel
 
         public int? CustomerId { get; set; }
 
-        public string CustomerName { get; set; }
+        public string? CustomerName { get; set; }
 
-        public string CustomerEmail { get; set; }
+        public string? CustomerEmail { get; set; }
 
-        public string CustomerPhone { get; set; }
+        public string? CustomerPhone { get; set; }
 
         public int NoOfPerson { get; set; }
 
@@ -91,9 +91,9 @@ namespace Entities.ViewModel
         public string UId { get; set; } = null!;
         public decimal OrderAmount { get; set; }
 
-        public string OrderInstruction { get; set; }
+        public string? OrderInstruction { get; set; }
 
-        public string orderComment { get; set; }
+        public string? orderComment { get; set; }
 
         public TimeSpan OccupiedTime { get; set; }
           public DateTime CreatedAt { get; set; }

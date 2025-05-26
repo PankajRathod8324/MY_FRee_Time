@@ -264,11 +264,22 @@ public class UserController : Controller
         var email = User.FindFirst(ClaimTypes.Email)?.Value;
         var user = _userService.GetUserByEmail(email);
         var role = _userService.GetRoleNameById((int)user.RoleId);
-        ViewBag.Roles = _userService.GetAllRoles().Where(r => !(role == "Account Manager" && r.RoleName == "Super Admin")).OrderBy(r => r.Priority).Select(r => new SelectListItem
+        ViewBag.Roles = _userService.GetAllRoles()
+        .Where(r => !(role == "Account Manager" && r.RoleName == "Super Admin"))
+        .OrderBy(r => r.Priority)
+        .Select(r => new SelectListItem
         {
             Value = r.RoleId.ToString(),
             Text = r.RoleName
-        }).ToList();
+        })
+        .Prepend(new SelectListItem
+        {
+            Value = "", // Empty string so Required validation fails
+            Text = "Select Role*",
+            Selected = true
+        })
+        .ToList();
+
 
         ViewBag.Countries = _userService.GetAllCountries().Select(c => new SelectListItem
         {

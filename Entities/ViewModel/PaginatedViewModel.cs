@@ -4,7 +4,7 @@ namespace Entities.ViewModel
 {
     public class PaginatedViewModel<T>
     {
-        public T Data { get; set; }  // Holds any type of ViewModel
+        public T? Data { get; set; }  // Holds any type of ViewModel
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
         public int TotalItemCount { get; set; }

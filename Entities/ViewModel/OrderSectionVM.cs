@@ -6,7 +6,7 @@ namespace Entities.ViewModel
 {
     public class OrderSectionVM
     {
-        public List<OrderTableVM> Table { get; set; }
+        public List<OrderTableVM> Table { get; set; } = new List<OrderTableVM>();
 
         public int Available {get; set;}
 
@@ -28,7 +28,7 @@ namespace Entities.ViewModel
         public int Capacity { get; set; }
         public int? StatusId { get; set; }
 
-        public string StatusName {get; set;}
+        public string? StatusName {get; set;}
 
         public bool? IsDeleted { get; set; }
 

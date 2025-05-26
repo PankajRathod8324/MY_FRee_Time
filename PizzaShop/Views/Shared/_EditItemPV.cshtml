@@ -47,7 +47,7 @@
                 <!-- Rate -->
                 <div class="col">
                     <div class="form-floating mb-3">
-                        <input type="text" asp-for="Rate" class="form-control modal-field" id="floatingInput">
+                        <input type="number" asp-for="Rate" class="form-control modal-field" id="floatingInput">
                         <label for="floatingInput" asp-for="Rate">Rate*</label>
                         <span asp-validation-for="Rate" class="text-danger"></span>
                     </div>
@@ -56,7 +56,7 @@
                 <!-- Quantity -->
                 <div class="col">
                     <div class="form-floating mb-3">
-                        <input type="text" asp-for="Quantity" class="form-control modal-field" id="floatingInput">
+                        <input type="number" asp-for="Quantity" class="form-control modal-field" id="floatingInput">
                         <label for="floatingInput" asp-for="Quantity">Quantity*</label>
                         <span asp-validation-for="Quantity" class="text-danger"></span>
                     </div>
@@ -162,11 +162,15 @@
     </div>
     <div class="modal-footer">
         <button type="submit" class="btn  webybg saveedititembtn fs-6 fw-bold text-white px-4">Save</button>
-        <button type="button" class="btn cancel-btn  webyborder webybtn fw-bold px-4" data-target="editMenuItemModal">Cancel</button>
+        <button type="button" class="btn cancel-btn  webyborder webybtn fw-bold px-4"
+            data-target="editMenuItemModal">Cancel</button>
     </div>
     <input type="hidden" id="currentPage" name="currentPage" value="@ViewBag.Page" />
 
 </form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -345,27 +349,30 @@
                     console.log("Sending data:", submissionData);
 
                     // Now that the image is added, send the AJAX request
-
-                    $.ajax({
-                        url: '/Menu/EditMenuItem',
-                        type: 'POST',
-                        contentType: "application/json",
-                        data: submissionData,
-                        success: function (response) {
-                            alert("Item Edited Successfully!");
-
-
-                            var myModal = bootstrap.Modal.getInstance(document.getElementById("editMenuItemModal"));
-                            if (myModal) myModal.hide();
-                            document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
+                    if ($(this).valid()) {
+                        $.ajax({
+                            url: '/Menu/EditMenuItem',
+                            type: 'POST',
+                            contentType: "application/json",
+                            data: submissionData,
+                            success: function (response) {
+                                alert("Item Edited Successfully!");
 
 
-                            loadMenuItems(formDataobj.CategoryId, currentPage);
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', xhr.responseText);
-                        }
-                    });
+                                var myModal = bootstrap.Modal.getInstance(document.getElementById("editMenuItemModal"));
+                                if (myModal) myModal.hide();
+                                document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
+
+
+                                loadMenuItems(formDataobj.CategoryId, currentPage);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error:', xhr.responseText);
+                            }
+                        });
+                    }
+
+
                 };
 
                 // Read the image file as base64
@@ -379,27 +386,24 @@
                 var submissionData = JSON.stringify(formDataobj);
 
                 console.log("Sending data:", submissionData);
+                if ($(this).valid()) {
+                    $.ajax({
+                        url: '/Menu/EditMenuItem',
+                        type: 'POST',
+                        contentType: "application/json",
+                        data: submissionData,
+                        success: function (response) {
+                            var myModal = bootstrap.Modal.getInstance(document.getElementById("editMenuItemModal"));
+                            if (myModal) myModal.hide();
+                            document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
+                            loadMenuItems(formDataobj.CategoryId, currentPage);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', xhr.responseText);
+                        }
+                    });
+                }
 
-                $.ajax({
-                    url: '/Menu/EditMenuItem',
-                    type: 'POST',
-                    contentType: "application/json",
-                    data: submissionData,
-                    success: function (response) {
-                        alert("Item Edited Successfully!");
-
-
-                        var myModal = bootstrap.Modal.getInstance(document.getElementById("editMenuItemModal"));
-                        if (myModal) myModal.hide();
-                        document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
-
-
-                        loadMenuItems(formDataobj.CategoryId, currentPage);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', xhr.responseText);
-                    }
-                });
             }
         });
 

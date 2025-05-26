@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Security.Claims;
 using System.Text.Json.Nodes;
 using BLL.Interfaces;
-using  DAL.Interfaces;
+using DAL.Interfaces;
 using Entities.Models;
 using Entities.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -47,6 +47,50 @@ public class MenuController : Controller
 
         return View(menuitemvm);
     }
+
+    [AcceptVerbs("Get", "Post")]
+    public IActionResult ValidateCategoryName(string categoryName, int categoryId)
+    {
+        categoryName = categoryName?.Trim().ToLower();
+
+        if (categoryId == 0)
+        {
+            // Add mode
+            bool exists = _menuService.GetAllCategories()
+                .Any(c => c.CategoryName.ToLower() == categoryName && c.IsDeleted == false);
+            return Json(!exists); // true means valid (not exists), false means invalid
+        }
+        else
+        {
+            // Edit mode
+            bool exists = _menuService.GetAllCategories()
+                .Any(c => c.CategoryName.ToLower() == categoryName &&
+                          c.CategoryId != categoryId &&
+                          c.IsDeleted == false);
+            return Json(!exists);
+        }
+    }
+
+
+    [AcceptVerbs("Get", "Post")]
+    public IActionResult ValidateItemName(string itemName, int itemId)
+    {
+        if (itemId == 0)
+        {
+            // Add mode
+            bool exists = _menuService.GetAllItems().Any(i => i.ItemName.ToLower() == itemName.ToLower() && (i.IsDeleted == false));
+            return Json(!exists);
+        }
+        else
+        {
+            // Edit mode
+            bool exists = _menuService.GetAllItems().Any(i => i.ItemName.ToLower() == itemName.ToLower()
+                                                  && i.ItemId != itemId
+                                                  && (i.IsDeleted == false));
+            return Json(!exists);
+        }
+    }
+
 
     [HttpPost]
     public IActionResult AddMenuItem([FromBody] JsonObject menuItemData)
@@ -123,10 +167,23 @@ public class MenuController : Controller
         var units = _menuService.GetAllUnits();
         var modifierGroups = _menuService.GetAllModifierGroups();
 
-        ViewBag.Categories = categories.Select(r => new SelectListItem { Value = r.CategoryId.ToString(), Text = r.CategoryName }).ToList();
-        ViewBag.Itemtypes = itemTypes.Select(r => new SelectListItem { Value = r.ItemtypeId.ToString(), Text = r.ItemType1 }).ToList();
-        ViewBag.Units = units.Select(r => new SelectListItem { Value = r.UnitId.ToString(), Text = r.UnitName }).ToList();
+        ViewBag.Categories = categories
+    .Select(r => new SelectListItem { Value = r.CategoryId.ToString(), Text = r.CategoryName })
+    .Prepend(new SelectListItem { Value = "", Text = "Select Category*", Selected = true })
+    .ToList();
+
+        ViewBag.Itemtypes = itemTypes
+            .Select(r => new SelectListItem { Value = r.ItemtypeId.ToString(), Text = r.ItemType1 })
+            .Prepend(new SelectListItem { Value = "", Text = "Select Item Type*", Selected = true })
+            .ToList();
+
+        ViewBag.Units = units
+            .Select(r => new SelectListItem { Value = r.UnitId.ToString(), Text = r.UnitName })
+            .Prepend(new SelectListItem { Value = "", Text = "Select Unit*", Selected = true })
+            .ToList();
+
         ViewBag.ModifierGroups = modifierGroups.Select(r => new SelectListItem { Value = r.ModifierGroupId.ToString(), Text = r.ModifierGroupName }).ToList();
+
     }
 
 
